@@ -43,8 +43,8 @@ if user_id:
                 data["results"][user_id] = picked
                 
                 st.balloons()
-                st.success(f"Draw Successful! You picked: **{picked}**")
-                st.warning("Take a screenshot or memorize it. Do not share your result!")
+                st.success(f"Draw Successful! You are **{picked}** 's secret angel, please prepare a small but creative gift and a lovely note for this person")
+                st.warning("Take a screenshot or memorize it. Do not share your result or reveal yourself in the note!")
         else:
             st.error("Sorry, all names have already been drawn!")
 
