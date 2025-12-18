@@ -57,9 +57,9 @@ with st.sidebar:
     if st.button("Reset Entire Draw"):
         # Reset everything back to the start
         data["pool"] = [
-            "Alice", "Bob", "Charlie", "David", 
-            "Eve", "Frank", "Grace", "Heidi", 
-            "Ivan", "Judy", "Karl", "Linda"
+            "Pili", "Benny Hoa Bang", "Kieu Hanh Luong", "Madhav", 
+            "Michael", "Ha Linh", "Nguyen Lan Huong", "Nhan Vat Gia Lap", 
+            "Phuong Linh", "Trung Nguyen", "Do Khanh Linh", "Tran Mai Huong"
         ]
         data["results"] = {}
         st.rerun()
