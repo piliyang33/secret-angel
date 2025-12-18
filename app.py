@@ -8,9 +8,9 @@ def get_global_data():
     return {
         # Replace these names with your actual 12 names
         "pool": [
-            "Alice", "Bob", "Charlie", "David", 
-            "Eve", "Frank", "Grace", "Heidi", 
-            "Ivan", "Judy", "Karl", "Linda"
+            "Pili", "Benny Hoa Bang", "Kieu Hanh Luong", "Madhav", 
+            "Michael", "Ha Linh", "Nguyen Lan Huong", "Nhan Vat Gia Lap", 
+            "Phuong Linh", "Trung Nguyen", "Do Khanh Linh", "Tran Mai Huong"
         ],
         "results": {}  # Stores: { "Participant Name": "Drawn Name" }
     }
