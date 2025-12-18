@@ -21,7 +21,7 @@ def result_dialog(user, picked):
     st.write(f"Hi {user}, you are the Secret Angel for:")
     st.title(f"✨ {picked}")
     st.write("---")
-    st.warning("Please memorize it or take a screenshot. This window will close!")
+    st.warning("Please keep it a secret and prepare a small creative gift & letter for this person. Don't tell anybody!")
 
 # 按钮布局
 cols = st.columns(2)
