@@ -13,7 +13,7 @@ def get_global_data():
 
 data = get_global_data()
 
-st.title("🎁 Secret Name Draw")
+st.title("🎁 Secret Angel Draw")
 st.info("Find your name and click it. Only you will see the result!")
 
 @st.dialog("YOUR SECRET RESULT")
