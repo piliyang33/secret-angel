@@ -14,11 +14,11 @@ def get_global_data():
 data = get_global_data()
 
 st.title("🎁 Secret Angel Draw")
-st.info("Find your name and click it. Only you will see the result!")
+st.info("Find YOUR name and click it, don't click on other people's name. Only you will see the result!")
 
 @st.dialog("YOUR SECRET RESULT")
 def result_dialog(user, picked):
-    st.write(f"Hi {user}, you are the Secret Santa for:")
+    st.write(f"Hi {user}, you are the Secret Angel for:")
     st.title(f"✨ {picked}")
     st.write("---")
     st.warning("Please memorize it or take a screenshot. This window will close!")
