@@ -1,7 +1,7 @@
 import streamlit as st
 import random
 
-# --- 1. 数据配置 (已去掉提示词，方便直接粘贴) ---
+# --- 1. 数据配置 ---
 PARTICIPANTS_DATA = {
     "王子": {
         "address": "泰康集团大厦地下B1M夹层1号柜美团外卖柜",
@@ -37,40 +37,30 @@ def get_global_data():
 
 data = get_global_data()
 
-# --- 2. 深度 UI 定制 ---
+# --- 2. UI 样式 ---
 st.set_page_config(page_title="圣诞外卖抽签", page_icon="🎄")
 
 st.markdown("""
-    <style>
-    .stApp { background-color: #F8F4E3; }
-    h1 { color: #D42426 !important; font-family: 'Courier New', Courier, monospace; }
-    .stButton>button {
-        border-radius: 12px;
-        border: 2px solid #165B33;
-        background-color: #D42426;
-        color: white;
-        font-weight: bold;
-    }
-    .receipt {
-        background-color: #FFFFFF;
-        padding: 20px;
-        border: 2px dashed #333;
-        border-radius: 5px;
-        font-family: 'Courier New', Courier, monospace;
-        box-shadow: 8px 8px 0px #165B33;
-    }
-    .receipt-title {
-        text-align: center;
-        border-bottom: 2px solid #333;
-        padding-bottom: 10px;
-        color: #D42426;
-        font-weight: bold;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+<style>
+.stApp { background-color: #F8F4E3; }
+.stButton>button {
+    border-radius: 12px;
+    border: 2px solid #165B33;
+    background-color: #D42426;
+    color: white;
+    font-weight: bold;
+}
+.receipt {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border: 2px dashed #333;
+    border-radius: 5px;
+    box-shadow: 8px 8px 0px #165B33;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.title("🎄 圣诞特别派送计划")
-st.markdown("### 🎅 谁是今日的幸运骑手？")
 
 if "my_pick" not in st.session_state:
     st.session_state.my_pick = None
@@ -81,4 +71,8 @@ if st.session_state.my_pick:
     info = PARTICIPANTS_DATA[picked_name]
     st.balloons()
     
-    st.markdown(f"""
+    # 构造小票 HTML
+    receipt_html = f"""
+    <div class="receipt">
+        <h3 style="text-align:center; color:#D42426; border-bottom:1px solid #333; padding-bottom:10px;">🔔 订单已锁定</h3>
+        <p style="font-size: 20px; text-align: center;"><b>收件人：{
