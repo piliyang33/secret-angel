@@ -41,16 +41,20 @@ for i, name in enumerate(N):
         pool = [p for p in data["p"] if p != name]
         if pool:
             res = random.choice(pool)
-            data["r"][name], data["p"].remove(res)
+            # --- 修复 KeyError 的地方 ---
+            data["r"][name] = res
+            data["p"].remove(res)
+            # ---------------------------
             st.session_state.pk = res
             st.rerun()
+        else: st.error("池子空了，请点左侧重置")
 
 # 5.后台
 with st.sidebar:
     pw = st.text_input("暗号", type="password")
     if pw == "8888":
-        if st.button("重置"):
+        if st.button("重置系统"):
             data["p"], data["r"] = list(N), {}
             st.session_state.pk = None
             st.rerun()
-        st.write(data["r"])
+        st.write("当前结果：", data["r"])
