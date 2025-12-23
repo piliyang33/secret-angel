@@ -37,7 +37,7 @@ def get_global_data():
 
 data = get_global_data()
 
-# --- 2. UI 样式 ---
+# --- 2. 页面配置 ---
 st.set_page_config(page_title="圣诞外卖抽签", page_icon="🎄")
 
 st.markdown("""
@@ -71,8 +71,32 @@ if st.session_state.my_pick:
     info = PARTICIPANTS_DATA[picked_name]
     st.balloons()
     
-    # 构造小票 HTML
-    receipt_html = f"""
-    <div class="receipt">
-        <h3 style="text-align:center; color:#D42426; border-bottom:1px solid #333; padding-bottom:10px;">🔔 订单已锁定</h3>
-        <p style="font-size: 20px; text-align: center;"><b>收件人：{
+    # 使用简单拼接避免 f-string 语法错误
+    html_content = '<div class="receipt">'
+    html_content += '<h3 style="text-align:center; color:#D42426; border-bottom:1px solid #333; padding-bottom:10px;">🔔 订单已锁定</h3>'
+    html_content += '<p style="font-size: 20px; text-align: center;"><b>收件人：' + picked_name + '</b></p>'
+    html_content += '<p>----------------------------</p>'
+    html_content += '<p>📍 ' + info['address'] + '</p>'
+    html_content += '<p>👤 ' + info['contact'] + '</p>'
+    html_content += '<p>' + info['time'] + '</p>'
+    html_content += '<p>🥤 ' + info['preference'] + '</p>'
+    html_content += '<p style="text-align: center; font-size: 12px; color: #666;">--- 请复制下方地址点餐 ---</p>'
+    html_content += '</div>'
+    
+    st.markdown(html_content, unsafe_allow_html=True)
+    
+    st.write("👇 点击下方灰色区域一键复制：")
+    st.code(info['copy_text'], language="text")
+    
+    if st.button("✅ 朕知道了，去点外卖"):
+        st.session_state.my_pick = None
+        st.rerun()
+    st.write("---")
+
+# --- 4. 按钮界面 ---
+st.write("### 🎁 点击你的名字领取订单：")
+cols = st.columns(2)
+for i, name in enumerate(NAMES):
+    with cols[i % 2]:
+        is_done = name in data["results"]
+        label = "🦌 " + name + " (派送中
