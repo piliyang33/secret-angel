@@ -37,7 +37,6 @@ data = get_global_data()
 # --- 2. 页面样式设置 ---
 st.set_page_config(page_title="圣诞饮料外卖抽签", page_icon="🥤")
 
-# 圣诞风格的 CSS
 st.markdown("""
     <style>
     .main { background-color: #fcfaf2; }
@@ -56,15 +55,12 @@ st.markdown("""
 st.title("🎄 圣诞惊喜外卖抽签")
 st.subheader("看看你要为哪位小伙伴点奶茶？")
 
-# --- 3. 核心逻辑 ---
 if "my_pick" not in st.session_state:
     st.session_state.my_pick = None
 
-# 如果已经抽过，显示“订单详情”
 if st.session_state.my_pick:
     picked_name = st.session_state.my_pick
     info = PARTICIPANTS_DATA[picked_name]
-    
     st.balloons()
     st.markdown(f"""
     <div class="order-box">
@@ -77,23 +73,38 @@ if st.session_state.my_pick:
         <p><b>口味偏好：</b> {info['preference']}</p>
     </div>
     """, unsafe_allow_html=True)
-    
     if st.button("我已截图，关闭信息"):
         st.session_state.my_pick = None
         st.rerun()
     st.write("---")
 
-# --- 4. 按钮矩阵 ---
 st.write("### 🎁 请点击你的名字开始抽签：")
 cols = st.columns(2)
 for i, name in enumerate(NAMES):
     with cols[i % 2]:
         is_done = name in data["results"]
         btn_label = f"✅ {name} (已参与)" if is_done else f"🥤 {name}"
-        
         if st.button(btn_label, key=name, disabled=is_done, use_container_width=True):
             if name not in data["results"]:
-                # 排除自己
                 temp_pool = [n for n in data["pool"] if n != name]
                 if not temp_pool:
-                    st.error("池子空了或只剩你自己
+                    st.error("池子空了或只剩你自己，请联系管理员重置。")
+                else:
+                    picked = random.choice(temp_pool)
+                    data["results"][name] = picked
+                    data["pool"].remove(picked)
+                    st.session_state.my_pick = picked
+                    st.rerun()
+
+with st.sidebar:
+    st.header("🎅 管理员后台")
+    pwd = st.text_input("请输入暗号", type="password")
+    if pwd == "8888":
+        st.success("身份验证通过")
+        if st.button("重置所有抽签进度"):
+            data["pool"] = list(NAMES)
+            data["results"] = {}
+            st.session_state.my_pick = None
+            st.rerun()
+        if st.checkbox("查看秘密清单"):
+            st.write(data["results"])
