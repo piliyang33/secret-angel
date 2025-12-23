@@ -37,14 +37,37 @@ def get_global_data():
 
 data = get_global_data()
 
-# --- 2. 页面设置 ---
+# --- 2. 页面设置 & 微信黑夜模式适配 ---
 st.set_page_config(page_title="圣诞抽签", page_icon="🎄")
 
 st.markdown("""
 <style>
-.stApp { background-color: #F8F4E3; }
-.stButton>button { border-radius: 12px; background-color: #D42426; color: white; font-weight: bold; }
-.receipt { background-color: #FFFFFF; padding: 20px; border: 2px dashed #333; border-radius: 5px; }
+/* 强制背景为浅色，防止黑夜模式反转 */
+.stApp { 
+    background-color: #F8F4E3 !important; 
+}
+
+/* 强制所有文字颜色为深灰色，防止黑夜模式下变白看不到 */
+.stApp p, .stApp span, .stApp label, .stApp div, .stApp h1, .stApp h2, .stApp h3 {
+    color: #333333 !important; 
+}
+
+/* 按钮样式：红色背景，白色文字 */
+.stButton>button { 
+    border-radius: 12px !important; 
+    background-color: #D42426 !important; 
+    color: #FFFFFF !important; 
+    font-weight: bold !important;
+    border: none !important;
+}
+
+/* 小票样式：纯白底黑字 */
+.receipt { 
+    background-color: #FFFFFF !important; 
+    padding: 20px; 
+    border: 2px dashed #333333 !important; 
+    border-radius: 5px; 
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -60,49 +83,4 @@ if st.session_state.my_pick:
     st.balloons()
     
     res_html = '<div class="receipt">'
-    res_html += '<h3 style="text-align:center;color:#D42426;">🔔 订单锁定</h3>'
-    res_html += '<p style="text-align:center;"><b>收件人：' + str(user) + '</b></p>'
-    res_html += '<p>----------------------------</p>'
-    res_html += '<p>📍 ' + str(info["address"]) + '</p>'
-    res_html += '<p>👤 ' + str(info["contact"]) + '</p>'
-    res_html += '<p>⏰ ' + str(info["time"]) + '</p>'
-    res_html += '<p>🥤 ' + str(info["preference"]) + '</p>'
-    res_html += '</div>'
-    
-    st.markdown(res_html, unsafe_allow_html=True)
-    st.code(info["copy_text"], language="text")
-    
-    if st.button("✅ 朕知道了"):
-        st.session_state.my_pick = None
-        st.rerun()
-
-# --- 4. 按钮矩阵 ---
-st.write("### 🎁 点击你的名字领取订单：")
-cols = st.columns(2)
-for i, n in enumerate(NAMES):
-    with cols[i % 2]:
-        done = n in data["results"]
-        lbl = "🦌 " + n + "(派送中)" if done else "🍲 " + n
-        if st.button(lbl, key=n, disabled=done, use_container_width=True):
-            if n not in data["results"]:
-                pool = [p for p in data["pool"] if p != n]
-                if pool:
-                    pick = random.choice(pool)
-                    data["results"][n] = pick
-                    data["pool"].remove(pick)
-                    st.session_state.my_pick = pick
-                    st.rerun()
-                else:
-                    st.error("池子错误，请联系管理员")
-
-# --- 5. 管理员 ---
-with st.sidebar:
-    pwd = st.text_input("暗号", type="password")
-    if pwd == "8888":
-        if st.button("重置系统"):
-            data["pool"] = list(NAMES)
-            data["results"] = {}
-            st.session_state.my_pick = None
-            st.rerun()
-        if st.checkbox("清单"):
-            st.write(data["results"])
+    res_html += '<h3 style="text-align:center;color:#D42
